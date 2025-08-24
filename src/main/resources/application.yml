@@ -1,0 +1,43 @@
+server:
+  port: 8080
+  
+spring:
+  application:
+    name: todo-api
+  
+  datasource:
+    url: jdbc:sqlite:./data/todos.db?date_string_format=yyyy-MM-dd
+    driver-class-name: org.sqlite.JDBC
+    
+  jpa:
+    hibernate:
+      ddl-auto: none  # Use Flyway for schema management
+    properties:
+      hibernate:
+        dialect: org.hibernate.community.dialect.SQLiteDialect
+        format_sql: true
+    show-sql: false
+    
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    
+logging:
+  level:
+    com.workshop.todoapi: DEBUG
+    org.springframework.web: INFO
+    org.hibernate.SQL: DEBUG
+    
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+      
+app:
+  sorter-service:
+    url: ${SORTER_SERVICE_URL:http://localhost:3001}
